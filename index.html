@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Brain Arena</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Poppins:wght@400;600;800&family=Playfair+Display:wght@600;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+:root{--bg:#EEF1FA;--bg2:#F7F1EE;--g1:#C3D0FF;--g2:#F6C6EA;--g3:#BDEEDD;--gl:#5B6CFF14;--card:#FBFBFFE6;--tx:#1B2033;--mu:#667090;--ac:#5B6CFF;--ac2:#B06BFF;--ln:#DDE2F0;--fs:16px;--ff:'Inter',system-ui,'Noto Sans','Noto Sans Bengali','Noto Sans Devanagari',sans-serif}
+[data-t=AURORA]{--bg:#E4F2EF;--bg2:#F1E9F7;--g1:#A9F0DC;--g2:#D3C2FF;--g3:#FFE0BF;--gl:#14A38B14;--ac:#12A58C;--ac2:#7A5CFF}
+[data-t=NIGHT]{--bg:#0E1019;--bg2:#171A2A;--g1:#3B3F9A77;--g2:#7A2F9A66;--g3:#0C6A8A66;--gl:#FFFFFF0C;--card:#1A1E2EE6;--tx:#EEF0F8;--mu:#98A0BA;--ln:#2A3046;--ac:#7C8BFF;--ac2:#D08BFF}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html{background:var(--bg)}
+body{margin:0;min-height:100dvh;color:var(--tx);font:var(--fs)/1.4 var(--ff)}
+body::before{content:'';position:fixed;inset:0;z-index:-2;background:radial-gradient(60% 45% at 8% 0,var(--g1),transparent 70%),radial-gradient(50% 40% at 100% 25%,var(--g2),transparent 70%),radial-gradient(70% 50% at 40% 110%,var(--g3),transparent 70%),linear-gradient(160deg,var(--bg),var(--bg2))}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(var(--gl) 1px,transparent 1px) 0 0/26px 26px,linear-gradient(90deg,var(--gl) 1px,transparent 1px) 0 0/26px 26px;-webkit-mask:radial-gradient(circle at 50% 30%,#000,transparent 85%);mask:radial-gradient(circle at 50% 30%,#000,transparent 85%)}
+#app{max-width:520px;margin:auto;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 96px;min-height:100dvh}
+#app.fit{height:100dvh;overflow:hidden;display:flex;flex-direction:column;gap:9px;padding-bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--ln);border-radius:20px;padding:12px;margin:9px 0;box-shadow:0 10px 30px #3A4A8A18}
+.fit .card{margin:0}
+.rgb{border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,conic-gradient(from var(--a),#FF3D81,#FFB02E,#3DFFA0,#2EC4FF,#A35CFF,#FF3D81) border-box;animation:spin 5s linear infinite}
+@keyframes spin{to{--a:360deg}}
+.logo{font-weight:800;letter-spacing:.18em;font-size:1.2em;background:linear-gradient(90deg,var(--ac),var(--ac2),#FF6AA8);-webkit-background-clip:text;background-clip:text;color:transparent;display:flex;align-items:center;gap:8px}
+.row{display:flex;align-items:center;gap:10px}.sp{justify-content:space-between}.mu{color:var(--mu);font-size:.82em}.big{font-size:1.4em;font-weight:800}
+.btn{border:0;border-radius:15px;padding:13px 16px;font:inherit;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 8px 18px #5B6CFF40;cursor:pointer;width:100%;display:block;text-align:center}
+.btn.g{background:var(--card);color:var(--tx);border:1px solid var(--ln);box-shadow:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.cat{padding:12px 6px;border-radius:16px;background:var(--card);border:1px solid var(--ln);cursor:pointer;font:inherit;color:var(--tx);font-weight:600;font-size:.82em;display:flex;flex-direction:column;align-items:center;gap:4px}
+.cat span{font-size:1.5em}
+.chip{padding:8px 13px;border-radius:99px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:inherit;cursor:pointer;margin:3px}
+.chip.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent}
+.bar{height:9px;border-radius:9px;background:var(--ln);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .3s}
+.av{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--card);box-shadow:0 0 0 2px var(--ac)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+nav div{display:flex;width:100%;max-width:500px;background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--ln);border-radius:24px;box-shadow:0 12px 34px #2A3A7A30;padding:6px}
+nav button{flex:1;border:0;background:none;color:var(--mu);font:inherit;font-size:.66em;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:18px;cursor:pointer}
+nav button.on{color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2))}
+svg.i{width:23px;height:23px;stroke:currentColor;fill:currentColor;fill-opacity:.14;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.opt{display:block;width:100%;text-align:start;margin:8px 0;padding:13px;border-radius:16px;border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,conic-gradient(from var(--a),#FF3D81,#FFB02E,#3DFFA0,#2EC4FF,#A35CFF,#FF3D81) border-box;animation:spin 6s linear infinite;color:var(--tx);font:inherit;font-weight:600;cursor:pointer}
+.opt.ok{background:#1FBF75;color:#fff;animation:none}.opt.no{background:#E5484D;color:#fff;animation:none}
+.mod{position:fixed;inset:0;background:#000A;display:flex;align-items:center;justify-content:center;z-index:9;padding:18px}
+.mod>div{background:var(--bg);border:1px solid var(--ln);border-radius:24px;padding:20px;max-width:400px;width:100%;max-height:88vh;overflow:auto;animation:pop .35s cubic-bezier(.2,1.4,.4,1);text-align:center;color:var(--tx)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.rk{text-align:center;font-size:.72em;cursor:pointer;padding:8px 2px;border-radius:14px;background:var(--card);border:1px solid var(--ln)}
+.ic{background:none;border:0;color:var(--tx);cursor:pointer;padding:6px}
+input.t{width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font:inherit}
+.tm{height:8px;border-radius:8px;background:var(--ln);overflow:hidden}.tm i{display:block;height:100%;background:#1FBF75;width:100%}
+.live{width:9px;height:9px;border-radius:50%;background:#E5484D;animation:pl 1.2s infinite;display:inline-block}@keyframes pl{50%{opacity:.2}}
+.sp1{width:34px;height:34px;border:4px solid var(--ln);border-top-color:var(--ac);border-radius:50%;animation:rot .8s linear infinite;margin:20px auto}@keyframes rot{to{transform:rotate(360deg)}}
+.bd{animation:fl 3s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-3px) rotate(3deg)}}
+.bdu{animation:hero 1.6s ease-out infinite}@keyframes hero{0%{transform:scale(.3) rotate(-180deg);opacity:0}40%{transform:scale(1.25) rotate(10deg);opacity:1}70%{transform:scale(1)}100%{transform:scale(1.06)}}
+.glow{filter:drop-shadow(0 0 14px gold)}
+.cf{position:fixed;top:-10px;width:8px;height:12px;z-index:20;animation:cf 2.2s linear forwards}@keyframes cf{to{transform:translateY(105vh) rotate(720deg)}}
+.pd{font-size:.72em}.lb{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:7px 0;border-radius:18px;background:var(--card);border:1px solid var(--ln)}
+.lb.me{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac) inset}.lb.t1{background:linear-gradient(135deg,#FFE27A55,var(--card))}.lb.t2{background:linear-gradient(135deg,#D5DCE855,var(--card))}.lb.t3{background:linear-gradient(135deg,#E8A87C55,var(--card))}
+.pos{width:30px;text-align:center;font-weight:800}
+</style></head><body><div id="app"></div><nav id="nav"></nav>
+<script>
+const $=s=>document.querySelector(s),rnd=n=>Math.floor(Math.random()*n),shuf=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const DUR=18; // question timer (seconds)
+const D={gkey:'',lang:'EN',theme:'PEARL',font:'Inter',fs:16,snd:1,name:'Player',av:{p:0},xp:0,cor:0,wr:0,best:0,cur:0,mis:[],rc:[]};
+let S={...D};try{Object.assign(S,JSON.parse(localStorage.getItem('ba2')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('ba2',JSON.stringify(S))}catch(e){}};
+const TR={EN:{home:'Home',play:'Play',retry:'Retry',board:'Ranks',me:'Profile',settings:'Settings',language:'Language',theme:'Theme',font:'Font',size:'Text size',sound:'Sound',leave:'Leave the current quiz?',yes:'Yes',no:'No',done:'Lesson complete',again:'Play again',correct:'Correct',wrong:'Wrong',next:'Next badge',level:'Level',best:'Best streak',acc:'Accuracy',badges:'Badges',edit:'Edit profile',save:'Save',gallery:'Choose from gallery',remove:'Remove photo',reset:'Reset all data',load:'Loading questions from internet…',togo:'XP to go',lvup:'LEVEL UP!',bup:'NEW BADGE!',unl:'Unlocked',max:'MAX',name:'Your name',ok:'OK',offline:'No internet. Questions need an online connection.',login:'Sign in with Google',logout:'Log out',lbt:'Live online leaderboard',lbl:'Sign in with Google to join the leaderboard.',yourrank:'Your rank',ALL:'All topics',GK:'General knowledge',RIDDLE:'Riddles',DETECT:'Detective',MATH:'Easy maths',OBS:'Observation',WORLD:'Global union & politics'},
+BN:{home:'হোম',play:'খেলুন',retry:'ভুলগুলো',board:'র‍্যাঙ্ক',me:'প্রোফাইল',settings:'সেটিংস',language:'ভাষা',theme:'থিম',font:'ফন্ট',size:'লেখার সাইজ',sound:'সাউন্ড',leave:'বর্তমান কুইজ ছেড়ে যেতে চান?',yes:'হ্যাঁ',no:'না',done:'লেসন শেষ',again:'আবার খেলুন',correct:'সঠিক',wrong:'ভুল',next:'পরের ব্যাজ',level:'লেভেল',best:'সেরা ধারা',acc:'নির্ভুলতা',badges:'ব্যাজ',edit:'প্রোফাইল এডিট',save:'সেভ',gallery:'গ্যালারি থেকে বাছুন',remove:'ছবি সরান',reset:'সব ডেটা রিসেট',load:'ইন্টারনেট থেকে প্রশ্ন আসছে…',togo:'XP বাকি',lvup:'লেভেল আপ!',bup:'নতুন ব্যাজ!',unl:'আনলকড',max:'সর্বোচ্চ',name:'আপনার নাম',ok:'ঠিক আছে',offline:'ইন্টারনেট নেই। প্রশ্নের জন্য অনলাইন দরকার।',login:'গুগল দিয়ে সাইন ইন',logout:'লগ আউট',lbt:'লাইভ অনলাইন লিডারবোর্ড',lbl:'লিডারবোর্ডে যোগ দিতে গুগল দিয়ে সাইন ইন করুন।',yourrank:'আপনার র‍্যাঙ্ক',ALL:'সব বিষয়',GK:'সাধারণ জ্ঞান',RIDDLE:'ধাঁধা',DETECT:'ডিটেকটিভ',MATH:'সহজ গণিত',OBS:'পর্যবেক্ষণ',WORLD:'গ্লোবাল ইউনিয়ন ও রাজনীতি'},
+HI:{home:'होम',play:'खेलें',retry:'गलतियाँ',board:'रैंक',me:'प्रोफ़ाइल',settings:'सेटिंग्स',language:'भाषा',theme:'थीम',font:'फ़ॉन्ट',size:'टेक्स्ट आकार',sound:'आवाज़',leave:'मौजूदा क्विज़ छोड़ना चाहते हैं?',yes:'हाँ',no:'नहीं',done:'लेसन पूरा',again:'फिर खेलें',correct:'सही',wrong:'गलत',next:'अगला बैज',level:'लेवल',best:'सर्वश्रेष्ठ स्ट्रीक',acc:'सटीकता',badges:'बैज',edit:'प्रोफ़ाइल बदलें',save:'सेव',gallery:'गैलरी से चुनें',remove:'फ़ोटो हटाएँ',reset:'सारा डेटा रीसेट',load:'इंटरनेट से प्रश्न आ रहे हैं…',togo:'XP बाकी',lvup:'लेवल अप!',bup:'नया बैज!',unl:'अनलॉक',max:'अधिकतम',name:'आपका नाम',ok:'ठीक है',offline:'इंटरनेट नहीं है। प्रश्नों के लिए ऑनलाइन चाहिए।',login:'Google से साइन इन',logout:'लॉग आउट',lbt:'लाइव ऑनलाइन लीडरबोर्ड',lbl:'लीडरबोर्ड के लिए Google से साइन इन करें।',yourrank:'आपकी रैंक',ALL:'सभी विषय',GK:'सामान्य ज्ञान',RIDDLE:'पहेलियाँ',DETECT:'जासूसी',MATH:'आसान गणित',OBS:'अवलोकन',WORLD:'वैश्विक संघ और राजनीति'}};
+const LN={EN:'English',BN:'বাংলা',HI:'हिन्दी'},LE={EN:'English',BN:'Bengali',HI:'Hindi'};if(!LN[S.lang])S.lang='EN';
+const T=k=>(TR[S.lang]||TR.EN)[k]||TR.EN[k]||k;
+const CATS=['ALL','GK','RIDDLE','DETECT','MATH','OBS','WORLD'],CE={ALL:'🌟',GK:'🧠',RIDDLE:'🧩',DETECT:'🕵️',MATH:'➗',OBS:'👁️',WORLD:'🌍'};
+const CP={GK:'everyday practical general knowledge (basic science, health and safety, internet safety, banking awareness, India and world basics, environment)',RIDDLE:'fun classic riddles with one clear answer',DETECT:'detective and mystery logic puzzles, clue reading, crime-solving common sense',OBS:'observation, counting and number-pattern questions',WORLD:'global unions and organisations (UN, EU, AU, ASEAN, NATO), democracy vs dictatorship, political systems, countries of the world; strictly neutral and factual, no party promotion',ALL:'a mix of general knowledge, riddles, detective puzzles, global politics and observation'};
+const OTDB={GK:[9,17,22,25],WORLD:[24,22],ALL:[9,17,22,24],OBS:[19],DETECT:[9],RIDDLE:[9]};
+const RN='Rookie|Explorer|Thinker|Sharpshooter|Strategist|Scholar|Tactician|Prodigy|Savant|Maestro|Sage|Champion|Grandmaster|Arena King|Legend'.split('|');
+const RX=[0,100,300,700,1300,2200,3500,5500,8500,13000,20000,30000,45000,70000,100000];
+const rk=x=>{let i=0;RX.forEach((v,j)=>{if(x>=v)i=j});return i};
+// Level: separate from badges, unlimited, easy early, gradually harder, based on correct answers (wins)
+const LV=c=>1+Math.floor(Math.sqrt(c/2));
+const FR=['32,4 56,18 56,46 32,60 8,46 8,18','C','32,3 61,32 32,61 3,32','32,4 56,12 54,38 32,60 10,38 8,12','20,5 44,5 59,20 59,44 44,59 20,59 5,44 5,20'];
+const SY=['<circle cx="12" cy="12" r="6"/>','<path d="M12 2l3 7 7 .6-5.3 4.7 1.7 7.2L12 17.8 5.6 21.5l1.7-7.2L2 9.600 9 9z"/>','<path d="M12 3l3 9-3 9-3-9z"/>','<circle cx="12" cy="9" r="5"/><rect x="9" y="15" width="6" height="5" rx="1"/>','<circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="4"/>','<path d="M4 5h7v14H4zM13 5h7v14h-7z"/>','<path d="M12 2l9 4v6c0 5-4 9-9 10C7 21 3 17 3 12V6z"/>','<path d="M13 2L4 14h6l-1 8 9-12h-6z"/>','<path d="M6 3h12l4 6-10 13L2 9z"/>','<path d="M3 18l2-11 5 5 2-8 2 8 5-5 2 11z"/>','<circle cx="12" cy="12" r="3"/><path d="M12 1v5M12 18v5M1 12h5M18 12h5" stroke="#fff" stroke-width="2.5"/>','<path d="M12 21C4 15 2 10 6 6c3-3 5 0 6 2 1-2 3-5 6-2 4 4 2 9-6 15z"/>','<path d="M12 2c3 5 7 6 7 12a7 7 0 01-14 0c0-3 2-4 3-7 1 2 2 3 2 3 0-3 0-6 2-8z"/>','<path d="M12 3l9 17H3z"/>','<path d="M12 2l2.5 6.5H21l-5.3 4 2 6.5L12 15l-5.7 4 2-6.5L3 8.5h6.500z"/>'];
+let gid=0;
+const RI=(i,s=44,lock,anim)=>{const h=i*24+190,id='g'+(gid++),f=FR[i%5];const shape=f=='C'?'<circle cx="32" cy="32" r="28" fill="url(#'+id+')"/><circle cx="32" cy="32" r="22" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.5"/>':`<polygon points="${f}" fill="url(#${id})" stroke="#fff" stroke-opacity=".7" stroke-width="2" stroke-linejoin="round"/>`;
+return`<svg class="${lock?'':'bd'} ${anim||''}" width="${s}" height="${s}" viewBox="0 0 64 64" style="filter:${lock?'grayscale(1) opacity(.45)':`drop-shadow(0 3px 5px hsla(${h},70%,40%,.5))`}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${h},85%,68%)"/><stop offset="1" stop-color="hsl(${h+50},75%,34%)"/></linearGradient></defs>${shape}<g transform="translate(17 15) scale(1.2)" fill="#fff">${SY[i]}</g><text x="32" y="58" text-anchor="middle" font-size="8" font-weight="800" fill="#fff">${i+1}</text></svg>`};
+const AVN=8,AV=a=>{if(a.img)return a.img;const h=a.p*45+200,sh=['<circle cx="32" cy="32" r="22" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3"/>','<rect x="14" y="14" width="36" height="36" transform="rotate(45 32 32)" fill="#fff" fill-opacity=".22"/>','<path d="M32 6L58 54H6Z" fill="#fff" fill-opacity=".22"/>','<path d="M6 20H58M6 32H58M6 44H58" stroke="#fff" stroke-opacity=".4" stroke-width="3"/>'][a.p%4];return'data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${h},78%,64%)"/><stop offset="1" stop-color="hsl(${h+60},70%,30%)"/></linearGradient></defs><rect width="64" height="64" fill="url(#g)"/>${sh}<circle cx="32" cy="26" r="8" fill="#fff"/><path d="M16 54c2-14 30-14 32 0z" fill="#fff"/></svg>`)};
+const IC={home:'<path d="M3 11l9-8 9 8v10H3z"/><path d="M9 21v-6h6v6"/>',play:'<circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/>',retry:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',board:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/>',me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-6 15-6 16 0z"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',back:'<path d="M15 5l-7 7 7 7"/>'};
+const ico=n=>`<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
+// sound
+let AC;const un=()=>{try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state!='running')AC.resume()}catch(e){}};
+['pointerdown','touchstart','click'].forEach(e=>document.addEventListener(e,un,{passive:true}));
+const tone=(f,d=.12,tp='sine',dl=0,v=.4)=>{if(!S.snd)return;try{un();const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+dl;o.type=tp;o.frequency.value=f;o.connect(g);g.connect(AC.destination);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.start(t);o.stop(t+d)}catch(e){}};
+const SND={click:()=>tone(560,.08),ok:()=>{tone(660,.1);tone(880,.15,'sine',.1)},bad:()=>tone(170,.3,'sawtooth'),win:()=>[523,659,784,1047,1319,1568].forEach((f,i)=>tone(f,.28,'triangle',i*.11)),
+pro:()=>{[392,523,659,784,1047,1319,1568,2093].forEach((f,i)=>{tone(f,.35,'triangle',i*.09);tone(f/2,.35,'sine',i*.09,.2)});[1047,1319,1568,2093].forEach(f=>tone(f,.9,'triangle',.9,.25))}};
+const confetti=()=>{for(let i=0;i<40;i++){const c=document.createElement('div');c.className='cf';c.style.left=rnd(100)+'vw';c.style.background=`hsl(${rnd(360)},90%,60%)`;c.style.animationDelay=Math.random()*.6+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3000)}};
+let tab='home',prev='home',Q=null,E=null,busy=0,cloud={user:null};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function theme(){const h=document.documentElement;h.dataset.t=S.theme;h.style.setProperty('--fs',S.fs+'px');h.style.setProperty('--ff',`'${S.font}',system-ui,'Noto Sans','Noto Sans Bengali','Noto Sans Devanagari',sans-serif`);h.lang=S.lang.toLowerCase()}
+function render(){theme();$('#nav').innerHTML='<div>'+['home','play','retry','board','me'].map(k=>`<button class="${tab==k||(tab=='set'&&k=='me')?'on':''}" onclick="go('${k}')">${ico(k)}<span>${T(k)}</span></button>`).join('')+'</div>';
+const a=$('#app');a.className=tab=='home'&&!busy?'fit':'';
+if(busy){a.innerHTML=`<div class="card" style="text-align:center;margin-top:30vh"><div class="sp1"></div>${T('load')}</div>`;return}
+if(Q&&tab=='play'){a.innerHTML=quizView();startTick()}else{a.innerHTML=({home,play,retry,board,me,set})[tab]();if(tab=='board')loadBoard()}window.scrollTo(0,0)}
+function go(k){SND.click();if(busy)return;if(Q){modal(`<div class=big>${T('leave')}</div><div class=grid style="margin-top:16px"><button class="btn g" onclick="closeM()">${T('no')}</button><button class=btn onclick="closeM();endQ();tab='${k}';render()">${T('yes')}</button></div>`);return}tab=k;render()}
+function modal(h){closeM();const d=document.createElement('div');d.className='mod';d.id='mod';d.innerHTML='<div>'+h+'</div>';document.body.appendChild(d)}
+const closeM=()=>{const m=$('#mod');m&&m.remove()};
+function endQ(){if(Q){clearInterval(Q.tm);Q=null}}
+function toast(h){modal(h+`<button class=btn style="margin-top:14px" onclick="closeM()">${T('ok')}</button>`);setTimeout(closeM,2600)}
+const head=()=>`<div class="row sp"><div class=logo><svg width=28 height=28 viewBox="0 0 48 48"><path d="M24 2L43 13v22L24 46 5 35V13z" fill="none" stroke="var(--ac)" stroke-width="3"/><path d="M17 30V18l7-8 7 8v12" fill="none" stroke="var(--ac2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>BRAIN ARENA</div><button class=ic onclick="prev=tab;tab='set';render()">${ico('gear')}</button></div>`;
+function prog(){const r=rk(S.xp),n=RX[r+1],p=n?(S.xp-RX[r])/(n-RX[r])*100:100;return`<div class=bar><i style="width:${p}%"></i></div><div class="mu row sp" style="margin-top:3px"><span>${n?(n-S.xp)+' '+T('togo')+' → '+RN[r+1]:T('max')}</span><span>${T('next')}</span></div>`}
+const acc=()=>{const t=S.cor+S.wr;return t?Math.round(S.cor/t*100):0};
+function home(){const r=rk(S.xp);
+return head()+`<div class="card rgb"><div class=row><img class=av src="${AV(S.av)}" onclick="go('me')"><div style="flex:1;min-width:0"><b>${esc(S.name)}</b><div class=mu>${RN[r]}</div><div class=big><span id=xpn>${S.xp}</span> XP</div></div><span onclick="binfo(${r})">${RI(r,58)}</span></div><div style="margin-top:8px">${prog()}</div></div>
+<div class="grid g3" style="text-align:center"><div class=card><div class=big>${S.xp}</div><div class=mu>XP</div></div><div class=card><div class=big>🔥${S.best}</div><div class=mu>${T('best')}</div></div><div class=card><div class=big>${acc()}%</div><div class=mu>${T('acc')}</div></div></div>
+<button class=btn onclick="start('ALL')">▶ ${T('play')}</button>
+<div class="grid g3" style="flex:1;min-height:0;align-content:start">${CATS.slice(1).map(c=>`<button class=cat onclick="start('${c}')"><span>${CE[c]}</span>${T(c)}</button>`).join('')}<button class=cat onclick="go('retry')"><span>🔁</span>${T('retry')} (${S.mis.length})</button></div>`}
+const play=()=>head()+`<div class=big style="margin:14px 0 8px">${T('play')}</div><div class="grid">${CATS.map(c=>`<button class=cat onclick="start('${c}')"><span>${CE[c]}</span>${T(c)}</button>`).join('')}</div><p class=mu>18s · 20 questions</p>`;
+const retry=()=>head()+`<div class=big style="margin:14px 0">${T('retry')} (${S.mis.length})</div>`+(S.mis.length?`<button class=btn onclick="start('ALL',1)">${T('retry')}</button>`+S.mis.map(q=>`<div class=card>${esc(tx(q))}</div>`).join(''):'<div class="card mu">✓</div>');
+// leaderboard
+function board(){return head()+`<div class=logo style="justify-content:center;margin:12px 0;font-size:1em">🏆 ${T('lbt')}</div><div id=lb><div class=sp1></div></div>`}
+async function loadBoard(){const el=$('#lb');if(!window.fetchBoard){el.innerHTML=`<div class="card mu">${window.fbErr?'Firebase: '+esc(window.fbErr):'…'}</div>`;if(!window.fbErr)setTimeout(()=>tab=='board'&&loadBoard(),800);return}
+if(!cloud.user){el.innerHTML=`<div class="card" style="text-align:center">${T('lbl')}<button class=btn style="margin-top:10px" onclick="googleLogin()">${T('login')}</button></div>`;return}
+const r=await fetchBoard();if(tab!='board')return;if(!r){el.innerHTML=`<div class="card mu">${T('offline')}</div>`;return}
+const uid=cloud.user.uid;el.innerHTML=r.list.map((p,i)=>{const me=p.id==uid;return`<div class="lb ${me?'me':''} ${i<3?'t'+(i+1):''}"><div class=pos>${i<3?['🥇','🥈','🥉'][i]:'#'+(i+1)}</div><img class=av style="width:40px;height:40px" src="${AV(p.av||{p:0})}"><div style="flex:1;min-width:0"><b>${esc(p.name||'Player')}</b>${me?' ✦':''}<div class=mu>${T('level')} ${LV(p.cor||0)} · ${RN[rk(p.xp||0)]}</div></div><div style="text-align:end"><b>${p.xp||0}</b> XP<div>${RI(rk(p.xp||0),26)}</div></div></div>`}).join('')+(r.rank>r.list.length?`<div class="card rgb" style="text-align:center;margin-top:12px">${T('yourrank')}: <b>#${r.rank}</b> · ${S.xp} XP</div>`:'')}
+function me(){const r=rk(S.xp);return head()+`<div class="card rgb" style="text-align:center"><img class=av style="width:96px;height:96px" src="${AV(S.av)}"><div class=big>${esc(S.name)}</div><div class=mu>${RN[r]}</div><div class=big style="margin:4px 0">⭐ ${T('level')} ${LV(S.cor)}</div>
+<div style="margin:10px 0;padding:10px;background:var(--ln);border-radius:12px">${cloud.user?`<b style="color:#1FBF75">✓ ${esc(cloud.user.email||cloud.user.displayName||'')}</b><button class="btn g" style="margin-top:8px" onclick="signOutNow()">${T('logout')}</button>`:`<button class=btn onclick="googleLogin()">${T('login')}</button>`}</div>
+<div class=grid><button class="btn g" onclick="edit()">✎ ${T('edit')}</button><button class=btn onclick="ball()">${T('badges')} ${r+1}/15</button></div></div>
+<div class=card><div class=big>${S.xp} XP</div>${prog()}</div><div class="grid g3"><div class=card>${T('correct')}<div class=big>${S.cor}</div></div><div class=card>${T('wrong')}<div class=big>${S.wr}</div></div><div class=card>${T('acc')}<div class=big>${acc()}%</div></div></div>`}
+function ball(){modal(`<div class=big style="margin-bottom:12px">${T('badges')}</div><div class="grid g3">${RN.map((n,i)=>`<div class=rk onclick="binfo(${i})">${RI(i,58,S.xp<RX[i])}<br><b>${n}</b><div class=mu>#${i+1} · ${RX[i]} XP</div></div>`).join('')}</div><button class="btn g" style="margin-top:14px" onclick="closeM()">${T('ok')}</button>`)}
+function binfo(i){modal(`${RI(i,110,S.xp<RX[i])}<div class=big>${RN[i]}</div><div class=mu>#${i+1} / 15</div><p>${RX[i]} XP</p><p class=mu>${S.xp>=RX[i]?'✓ '+T('unl'):(RX[i]-S.xp)+' '+T('togo')}</p><button class=btn onclick="closeM()">${T('ok')}</button>`)}
+function set(){const ch=(a,cur,fn)=>a.map(([v,n])=>`<button class="chip ${cur==v?'on':''}" onclick="${fn}('${v}')">${n}</button>`).join('');
+return`<div class=row><button class=ic onclick="tab=prev;render()">${ico('back')}</button><div class=big>${T('settings')}</div></div><div class=card><b>${T('language')}</b><div>${ch(Object.entries(LN),S.lang,'setL')}</div></div><div class=card><b>${T('theme')}</b><div>${ch([['PEARL','Pearl'],['AURORA','Aurora'],['NIGHT','Midnight']],S.theme,'setT')}</div></div><div class=card><b>${T('font')}</b><div>${ch(['Inter','Poppins','Playfair Display','Nunito','monospace'].map(f=>[f,f]),S.font,'setF')}</div><b>${T('size')}</b><div>${ch([[14,'S'],[16,'M'],[18,'L']],S.fs,'setS')}</div></div><div class=card><b>${T('sound')}</b><div><button class="chip ${S.snd?'on':''}" onclick="S.snd=${S.snd?0:1};save();SND.ok();render()">${S.snd?'ON':'OFF'}</button><button class=chip onclick="SND.win()">TEST</button></div></div><div class=card><b>Gemini API key</b><p class=mu style="margin:4px 0">aistudio.google.com → Get API key (free)</p><input class=t id=gk type=password value="${esc(S.gkey||'')}" placeholder="AIza..."><button class=btn style="margin-top:8px" onclick="S.gkey=$('#gk').value.trim();save();SND.ok();toast('<div class=big>✓ Saved</div>')">${T('save')}</button></div><button class="btn g" onclick="if(confirm('?')){S={...D,gkey:S.gkey};save();render()}">${T('reset')}</button>`}
+const setL=v=>{S.lang=v;save();render()},setT=v=>{S.theme=v;save();render()},setF=v=>{S.font=v;save();render()},setS=v=>{S.fs=+v;save();render()};
+function edit(){E={...S.av};ed()}
+function ed(){modal(`<img class=av style="width:96px;height:96px" src="${AV(E)}"><input class=t id=nm value="${esc(S.name)}" maxlength=18 placeholder="${T('name')}" style="margin:12px 0"><div class="grid g4">${[...Array(AVN)].map((_,i)=>`<img class=av style="width:100%;height:auto;${E.p===i&&!E.img?'box-shadow:0 0 0 3px var(--ac2)':''}" src="${AV({p:i})}" onclick="keep();E={p:${i}};ed()">`).join('')}</div><label class="btn g" style="margin:12px 0">${T('gallery')}<input type=file accept="image/*" hidden onchange="pick(this)"></label><button class="btn g" onclick="keep();E={p:0};ed()">${T('remove')}</button><div class=grid style="margin-top:12px"><button class="btn g" onclick="closeM()">${T('no')}</button><button class=btn onclick="keep();S.av=E;save();sync();closeM();render()">${T('save')}</button></div>`)}
+function keep(){const n=$('#nm');if(n&&n.value.trim())S.name=n.value.trim()}
+function pick(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=256;const m=Math.min(im.width,im.height);c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,256,256);keep();E={img:c.toDataURL('image/jpeg',.85)};ed()};im.src=r.result};r.readAsDataURL(f);i.value=''}
+const tx=q=>q.t[S.lang]||Object.values(q.t)[0],ox=q=>q.o[S.lang]||Object.values(q.o)[0];
+// ---------- ONLINE QUESTIONS ONLY ----------
+const dec=s=>{const t=document.createElement('textarea');t.innerHTML=s;return t.value};
+const tmo=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r('timeout'),ms))]);
+function parseQs(txt,cat){const m=(txt||'').match(/\[[\s\S]*\]/);if(!m)return[];let a;try{a=JSON.parse(m[0])}catch(e){return[]}
+return a.filter(x=>x&&x.q&&Array.isArray(x.o)&&x.o.length==4&&x.a>=0&&x.a<4).map(x=>({id:'a'+Date.now()+rnd(1e6),cat,d:x.d?1:0,t:{[S.lang]:String(x.q)},o:{[S.lang]:x.o.map(String)},a:+x.a}))}
+async function genAI(cat,n){const key=(S.gkey||'').trim();if(!key){window.lastErr='NOKEY';return[]}
+const L=LE[S.lang],seed=rnd(1e9);
+const p=`Create ${n} multiple-choice quiz questions written entirely in ${L} (the question and all 4 options must be in ${L}). Topic: ${CP[cat]}. Rules: useful knowledge an ordinary person should know; only easy or medium; exactly one clearly correct answer; no obscure trivia; different from: ${S.rc.slice(-8).join(' | ')}. Random seed ${seed}. Return ONLY a JSON array like [{"q":"...","o":["A","B","C","D"],"a":0,"d":0}] where a is the index (0-3) of the correct option and d is 0 for easy or 1 for medium.`;
+for(const m of['gemini-3.1-flash-lite','gemini-3.5-flash','gemini-3-flash-preview']){try{const r=await tmo(fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(key)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:{responseMimeType:'application/json',temperature:1}})}),25000);
+if(!r.ok){window.lastErr='Gemini HTTP '+r.status+' ('+m+')'+(r.status==403?' check API key':'');continue}
+const j=await r.json(),q=parseQs(j.candidates[0].content.parts[0].text,cat);if(q.length)return q;window.lastErr='AI reply not readable'}catch(e){window.lastErr=String(e&&e.message||e)}}return[]}
+async function genDB(cat,n){const c=OTDB[cat]||[9],id=c[rnd(c.length)],dif=['easy','medium'][rnd(2)];
+const r=await tmo(fetch(`https://opentdb.com/api.php?amount=${n}&category=${id}&difficulty=${dif}&type=multiple`),12000),j=await r.json();
+return(j.results||[]).map(x=>{const o=shuf([...x.incorrect_answers,x.correct_answer].map(dec));return{id:'o'+Date.now()+rnd(1e6),cat,d:dif=='easy'?0:1,t:{[S.lang]:dec(x.question)},o:{[S.lang]:o},a:o.indexOf(dec(x.correct_answer))}})}
+async function gen(cat,n){try{const r=await genAI(cat,n);if(r.length)return r}catch(e){}
+if(cat=='OBS'){const o=[];while(o.length<n)o.push(mkSeq());return o}
+if(cat=='RIDDLE'||cat=='DETECT')return[];try{const r=await genDB(cat,n);if(r.length&&S.lang!='EN')window.note=1;return r}catch(e){window.lastErr=String(e&&e.message||e);return[]}}
+function mkSeq(){const a=rnd(9)+1,d=rnd(7)+2,g=rnd(3)==0,s=[0,1,2,3].map(i=>g?a*Math.pow(2,i):a+d*i),r=g?a*16:a+d*4;let o=[...new Set([r,r+1,r-1,r+d])];while(o.length<4)o.push(r+o.length+5);o=shuf(o);return{id:'s'+Date.now()+rnd(1e6),cat:'OBS',d:0,t:{EN:s.join(', ')+', ?'},o:{EN:o.map(String)},a:o.indexOf(r)}}
+function mkMath(){let a=rnd(9)+2,b=rnd(9)+2,k=rnd(4),q,r;if(k==0){q=a+' + '+b;r=a+b}else if(k==1){a+=b;q=a+' − '+b;r=a-b}else if(k==2){q=a+' × '+b;r=a*b}else{q=a*b+' ÷ '+a;r=b}
+let o=[...new Set([r,r+1,r+2,Math.max(0,r-1)])];while(o.length<4)o.push(r+o.length+3);o=shuf(o);return{id:'m'+Date.now()+rnd(1e6),cat:'MATH',d:0,t:{EN:q+' = ?'},o:{EN:o.map(String)},a:o.indexOf(r)}}
+async function start(cat,retry){SND.click();endQ();let p=[];
+if(retry)p=S.mis.slice(0,20);else{busy=1;tab='play';render();
+if(cat=='MATH')while(p.length<20)p.push(mkMath());else{p=await gen(cat,cat=='OBS'?10:5);if(cat=='ALL'&&p.length)for(let i=0;i<3;i++)p.push(mkMath());if(cat=='OBS')while(p.length<20)p.push(mkSeq())}
+busy=0}
+if(!p.length){busy=0;tab='home';render();toast(window.lastErr=='NOKEY'?`<div class=big>${S.lang=='BN'?'সেটিংসে Gemini API key দিন (প্রোফাইল → ⚙️)':'Add your Gemini API key in Settings (⚙️)'}</div>`:`<div class=big>${T('offline')}</div><p class=mu>${esc(window.lastErr||'')}</p>`);return}
+p=shuf(p);p.forEach(q=>S.rc.push(tx(q).slice(0,50)));S.rc=S.rc.slice(-60);Q={l:p,i:0,r:0,w:0,xp:0};tab='play';const q0=Q;if(!retry&&cat!='MATH'&&cat!='OBS'&&p.length<20){q0.more=1;q0.fail=0;bgFill(q0,cat)}show();if(window.note){window.note=0;toast('<div class=big>EN</div><p class=mu>Translated questions were unavailable; showing English.</p>')}}
+async function bgFill(q,cat){while(Q===q&&q.l.length<20&&q.fail<2){const x=await gen(cat,8);if(Q!==q)return;if(!x.length){q.fail++;continue}q.l.push(...x.slice(0,20-q.l.length));if(q.wait){q.wait=0;busy=0;show()}}if(Q===q){q.more=0;if(q.wait){q.wait=0;busy=0;q.i<q.l.length?show():fin()}}}
+function show(){const q=Q.l[Q.i];Q.ord=shuf([0,1,2,3]);Q.lock=0;Q.end=Date.now()+DUR*1000;render()}
+function quizView(){const q=Q.l[Q.i],o=ox(q);return`<div class="row sp"><span class=mu>${Q.i+1}/${Q.l.length}</span><b><span class=live></span> <span id=xpn>${S.xp}</span> XP · 🔥${S.cur}</b></div><div class=bar style="margin:6px 0"><i style="width:${Q.i/Q.l.length*100}%"></i></div><div class="row sp" style="margin:10px 0"><span class=mu>${CE[q.cat]||''} ${T(q.cat)}</span><b id=tn>${DUR}</b></div><div class=tm><i id=tb></i></div><div class="card big" style="font-size:1.15em;margin-top:14px">${esc(tx(q))}</div>${Q.ord.map((j,k)=>`<button class=opt id=o${k} onclick="ans(${k})">${esc(o[j])}</button>`).join('')}`}
+function startTick(){clearInterval(Q.tm);if(Q.lock)return;const run=()=>{const l=Math.max(0,(Q.end-Date.now())/1000),b=$('#tb');if(!b)return;b.style.width=l/DUR*100+'%';b.style.background=l<5?'#E5484D':'#1FBF75';$('#tn').textContent=Math.ceil(l);if(l<=0){clearInterval(Q.tm);ans(-1)}};run();Q.tm=setInterval(run,100)}
+function ans(k){if(!Q||Q.lock)return;Q.lock=1;clearInterval(Q.tm);const q=Q.l[Q.i],c=Q.ord.indexOf(q.a),b=$('#o'+c);b&&b.classList.add('ok');const l0=LV(S.cor),r0=rk(S.xp);
+if(k==c){SND.ok();const g=q.d?15:10;Q.r++;S.cor++;cnt(S.xp,S.xp+g);S.xp+=g;Q.xp+=g;S.cur++;if(S.cur>S.best)S.best=S.cur; /* best streak never resets on a loss */S.mis=S.mis.filter(m=>m.id!=q.id)}
+else{SND.bad();k>=0&&$('#o'+k).classList.add('no');Q.w++;S.wr++;S.cur=0;if(!S.mis.some(m=>m.id==q.id))S.mis.push(q);S.mis=S.mis.slice(-60)}
+save();sync();let up='',bad=0;if(LV(S.cor)>l0){up=`<div class=big>⬆ ${T('lvup')}</div><p>${T('level')} ${LV(S.cor)}</p>`;}
+if(rk(S.xp)>r0){bad=1;up=`<div class=bdu style="display:inline-block">${RI(rk(S.xp),110,0,'glow')}</div><div class=big>${T('bup')}</div><p>${RN[rk(S.xp)]}</p>`}
+if(up)setTimeout(()=>{bad?(SND.pro(),confetti()):SND.win();toast(up)},500);
+setTimeout(()=>{if(!Q)return;Q.i++;if(Q.i<Q.l.length)show();else if(Q.more){Q.wait=1;busy=1;render()}else fin()},k<0?1400:(up?3000:1000))}
+function cnt(a,b){let n=0;const el=$('#xpn'),id=setInterval(()=>{n++;el&&(el.textContent=Math.round(a+(b-a)*n/10));if(n>=10)clearInterval(id)},40)}
+function fin(){const q=Q;endQ();SND.win();sync();tab='home';render();modal(`<div class=big style="font-size:2em">🏆</div><div class=big>${T('done')}</div><div class=grid style="margin:14px 0"><div class=card>${T('correct')}<div class=big style="color:#1FBF75">${q.r}</div></div><div class=card>${T('wrong')}<div class=big style="color:#E5484D">${q.w}</div></div></div><div class=big>+${q.xp} XP</div><p class=mu>${T('level')} ${LV(S.cor)} · ${RN[rk(S.xp)]}</p><button class=btn onclick="closeM();start('ALL')">${T('again')}</button><button class="btn g" style="margin-top:8px" onclick="closeM()">${T('home')}</button>`)}
+const sync=()=>{window.syncScore&&window.syncScore(S)};
+const notify=s=>toast(`<div class=big style="font-size:1em">${esc(s)}</div>`);
+const googleLogin=()=>window.googleLoginFB?window.googleLoginFB():notify('Firebase not ready: '+(window.fbErr||'check apiKey/appId and internet'));
+const signOutNow=()=>window.signOutFB&&window.signOutFB();
+render();
+</script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getAuth,GoogleAuthProvider,signInWithRedirect,signInWithPopup,getRedirectResult,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,collection,getDocs,query,orderBy,limit,where,getCountFromServer}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// >>> PASTE YOUR ORIGINAL FIREBASE CONFIG HERE (apiKey & appId are case-sensitive) <<<
+const firebaseConfig={apiKey:"AIzaSyAdT-WpU-xpejAC0Agvfai3GAm5Cmihchg",authDomain:"brain-arena-517ba.firebaseapp.com",projectId:"brain-arena-517ba",storageBucket:"brain-arena-517ba.firebasestorage.app",messagingSenderId:"297784083325",appId:"1:297784083325:web:6cd9c3c475aa65fdd3c214"};
+let app,auth,db;try{app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app)}catch(e){window.fbErr=e.code||e.message;console.error(e)}
+if(auth){
+window.googleLoginFB=async()=>{if(firebaseConfig.apiKey.startsWith('YOUR')){notify('Firebase apiKey/appId not set in the file.');return}
+if(!/^https?:$/.test(location.protocol)){notify('Google sign-in needs the app opened from a web address (https://...), not from a downloaded file. Host the file (GitHub Pages / Firebase Hosting) and open that link.');return}
+const p=new GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
+try{await signInWithPopup(auth,p)}catch(e){if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment'].includes(e.code))signInWithRedirect(auth,p).catch(x=>notify(x.code));else if(e.code!='auth/popup-closed-by-user'&&e.code!='auth/cancelled-popup-request')notify('Login error: '+e.code)}};
+window.signOutFB=()=>signOut(auth).then(()=>{cloud.user=null;render()});
+getRedirectResult(auth).catch(e=>console.error(e));
+window.syncScore=async s=>{const u=auth.currentUser;if(!u)return;try{await setDoc(doc(db,"leaderboard",u.uid),{name:s.name,xp:s.xp,cor:s.cor,wr:s.wr,best:s.best,av:s.av&&s.av.img?{p:0}:s.av},{merge:true})}catch(e){console.error(e)}};
+window.fetchBoard=async()=>{try{const snap=await getDocs(query(collection(db,"leaderboard"),orderBy("xp","desc"),limit(20)));const list=[];snap.forEach(d=>list.push({id:d.id,...d.data()}));
+const u=auth.currentUser;let rank=0;if(u){const i=list.findIndex(p=>p.id==u.uid);if(i>=0)rank=i+1;else{const c=await getCountFromServer(query(collection(db,"leaderboard"),where("xp",">",S.xp)));rank=c.data().count+1}}return{list,rank}}catch(e){console.error(e);return null}};
+onAuthStateChanged(auth,async u=>{cloud.user=u;if(u){try{const sn=await getDoc(doc(db,"leaderboard",u.uid));if(sn.exists()){const c=sn.data();S.name=(c.name&&c.name!='Player')?c.name:(u.displayName||S.name);S.xp=Math.max(S.xp,c.xp||0);S.cor=Math.max(S.cor,c.cor||0);S.wr=Math.max(S.wr,c.wr||0);S.best=Math.max(S.best,c.best||0)}else if(u.displayName&&S.name=='Player')S.name=u.displayName;if((!S.name||S.name=='Player')&&u.displayName)S.name=u.displayName;save();await syncScore(S)}catch(e){console.error(e)}}
+if(!Q&&!busy)render()});}
+</script></body></html>
